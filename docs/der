@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English Learning Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4ff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background: #3b82f6;
+      color: white;
+      padding: 2rem;
+      font-size: 1.8rem;
+    }
+    #game-container {
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 0.8rem 1.2rem;
+      margin: 0.5rem;
+      border: none;
+      background: #2563eb;
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    #result {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>English Learning Game</header>
+
+  <div id="game-container">
+    <h2>Translate the Word</h2>
+    <p id="word">Loading...</p>
+
+    <div id="options"></div>
+    <p id="result"></p>
+
+    <button onclick="nextWord()">Next Word</button>
+  </div>
+
+  <script>
+    const words = [
+      { en: "apple", de: "Apfel" },
+      { en: "house", de: "Haus" },
+      { en: "car", de: "Auto" },
+      { en: "school", de: "Schule" },
+      { en: "sun", de: "Sonne" },
+      { en: "water", de: "Wasser" }
+    ];
+
+    function nextWord() {
+      document.getElementById('result').textContent = "";
+      const word = words[Math.floor(Math.random() * words.length)];
+      currentWord = word;
+      document.getElementById('word').textContent = `What is the German word for: ${word.en}?`;
+
+      const options = [word.de];
+      while (options.length < 3) {
+        const random = words[Math.floor(Math.random() * words.length)].de;
+        if (!options.includes(random)) options.push(random);
+      }
+
+      shuffle(options);
+
+      const optionButtons = options
+        .map(opt => `<button onclick=\"checkAnswer('${opt}')\">${opt}</button>`) 
+        .join('');
+
+      document.getElementById('options').innerHTML = optionButtons;
+    }
+
+    function checkAnswer(selected) {
+      if (selected === currentWord.de) {
+        document.getElementById('result').textContent = "Correct!";
+        document.getElementById('result').style.color = "green";
+      } else {
+        document.getElementById('result').textContent = "Wrong!";
+        document.getElementById('result').style.color = "red";
+      }
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    let currentWord;
+    nextWord();
+  </script>
+</body>
+</html>
